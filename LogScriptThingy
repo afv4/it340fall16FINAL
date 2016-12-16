@@ -1,0 +1,33 @@
+#!/bin/bash
+LOG=$1
+DAYS=$2
+temp='/home/afv4/temp'
+currentDay=$(date +%d)
+currentMonth=$(date +%b)
+monthInNum=$(date +%m)
+report='/home/afv4/gitStuff/GRAND_FINALE'
+echo $LOG > $report
+cat $LOG | egrep -a '[A-Z][a-z]{2}[[:space:]][0-9]{2}'>$temp
+COUNT=$(wc -l < $temp)
+if [[ $COUNT -gt 0 ]]; then
+awk -v day="$currentDay" -v numDays="$DAYS" -v month="$currentMonth" '(month==$1) && (day-$2<=numDays) {print $0}' $LOG > /home/afv4/temp2
+grep -i "error" /home/afv4/temp2 > $temp
+errorCount=$(wc -l < $temp)
+grep -i "critical" /home/afv4/temp2 > $temp
+critCount=$(wc -l < $temp)
+grep -i "warning" /home/afv4/temp2 > $temp
+warnCount=$(wc -l < $temp)
+grep -i "fatal" /home/afv4/temp2 > $temp
+fatality=$(wc -l < $temp)
+echo 'Count of Errors in log: ' $errorCount
+echo 'Count of Errors in log: ' $errorCount >> $report
+echo 'Count of Crits in log: ' $critCount
+echo 'Count of Crits in log: ' $critCount >> $report
+echo 'Count of Warnings in log: ' $warnCount
+echo 'Count of Warnings in log: ' $warnCount >> $report
+echo 'Count of FATALITIES in log: ' $fatality
+echo 'Count of FATALITIES in log: ' $fatality >> $report
+fi
+echo 'This is the end of the script. I will now delete the temporary files.'
+rm -f $temp
+rm -f /home/afv4/temp2
