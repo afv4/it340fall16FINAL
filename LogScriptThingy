@@ -1,33 +1,33 @@
 #!/bin/bash
 LOG=$1
 DAYS=$2
-temp='/home/afv4/temp'
+TMP='/home/afv4/temp'
+REPORT='/home/afv4/gitStuff/GRAND_FINALE'
 currentDay=$(date +%d)
 currentMonth=$(date +%b)
 monthInNum=$(date +%m)
-report='/home/afv4/gitStuff/GRAND_FINALE'
-echo $LOG > $report
-cat $LOG | egrep -a '[A-Z][a-z]{2}[[:space:]][0-9]{2}'>$temp
-COUNT=$(wc -l < $temp)
+echo $LOG > $REPORT
+cat $LOG | egrep -a '[A-Z][a-z]{2}[[:space:]][0-9]{2}'>$TMP
+COUNT=$(wc -l < $TMP)
 if [[ $COUNT -gt 0 ]]; then
 awk -v day="$currentDay" -v numDays="$DAYS" -v month="$currentMonth" '(month==$1) && (day-$2<=numDays) {print $0}' $LOG > /home/afv4/temp2
-grep -i "error" /home/afv4/temp2 > $temp
-errorCount=$(wc -l < $temp)
-grep -i "critical" /home/afv4/temp2 > $temp
-critCount=$(wc -l < $temp)
-grep -i "warning" /home/afv4/temp2 > $temp
-warnCount=$(wc -l < $temp)
-grep -i "fatal" /home/afv4/temp2 > $temp
-fatality=$(wc -l < $temp)
-echo 'Count of Errors in log: ' $errorCount
-echo 'Count of Errors in log: ' $errorCount >> $report
-echo 'Count of Crits in log: ' $critCount
-echo 'Count of Crits in log: ' $critCount >> $report
-echo 'Count of Warnings in log: ' $warnCount
-echo 'Count of Warnings in log: ' $warnCount >> $report
-echo 'Count of FATALITIES in log: ' $fatality
-echo 'Count of FATALITIES in log: ' $fatality >> $report
+grep -i "error" /home/afv4/temp2 > $TMP
+GLITCHES=$(wc -l < $TMP)
+grep -i "critical" /home/afv4/temp2 > $TMP
+CRITICALHITS=$(wc -l < $TMP)
+grep -i "warning" /home/afv4/temp2 > $TMP
+MEGAMANBOSSES=$(wc -l < $TMP)
+grep -i "fatal" /home/afv4/temp2 > $TMP
+FATALITY=$(wc -l < $TMP)
+echo 'Count of Errors in log: ' $GLITCHES
+echo 'Count of Errors in log: ' $GLITCHES >> $REPORT
+echo 'Count of Crits in log: ' $CRITICALHITS
+echo 'Count of Crits in log: ' $CRITICALHITS >> $REPORT
+echo 'Count of Warnings in log: ' $MEGAMANBOSSES
+echo 'Count of Warnings in log: ' $MEGAMANBOSSES >> $REPORT
+echo 'Count of FATALITIES in log: ' $FATALITY
+echo 'Count of FATALITIES in log: ' $FATALITY >> $REPORT
 fi
 echo 'This is the end of the script. I will now delete the temporary files.'
-rm -f $temp
+rm -f $TMP
 rm -f /home/afv4/temp2
